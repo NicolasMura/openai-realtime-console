@@ -23,7 +23,10 @@ export default function App() {
     // Set up to play remote audio from the model
     audioElement.current = document.createElement("audio");
     audioElement.current.autoplay = true;
-    pc.ontrack = (e) => (audioElement.current.srcObject = e.streams[0]);
+    pc.ontrack = (e) => {
+      console.log("Received remote track:", e);
+      audioElement.current.srcObject = e.streams[0];
+    };
 
     // Add local audio track for microphone input in the browser
     const ms = await navigator.mediaDevices.getUserMedia({
@@ -133,6 +136,21 @@ export default function App() {
         }
 
         setEvents((prev) => [event, ...prev]);
+        // console.log("Received event:", event);
+        if (event.type === 'response.audio_transcript.delta') {
+          // commencer la synchronisation ici
+          console.log("Received event - response_id:", event.response_id);
+          console.log("Delta:", event.delta);
+        }
+        if (event.type === 'response.audio_transcript.done') {
+          // poursuivre la synchronisation ici dès que la transcription complète est disponible (optimisation)
+          console.log("Received event - response_id:", event.response_id);
+          console.log("Done:", event.transcript);
+        }
+        if (event.type === 'response.content_part.done') {
+          // à priori pas utile, mais on sait jamais
+          // console.log("Done:", event.part?.transcript);
+        }
       });
 
       // Set session active when the data channel is opened
@@ -141,7 +159,15 @@ export default function App() {
         setEvents([]);
       });
     }
+
+    // console.log(events.map((event) => event.transcript));
+    // console.log(events.slice(-1).transcript);
   }, [dataChannel]);
+
+  // Debug
+  // useEffect(() => {
+  //   console.log("Events:", events);
+  // }, [events]);
 
   return (
     <>
@@ -154,7 +180,7 @@ export default function App() {
       <main className="absolute top-16 left-0 right-0 bottom-0">
         <section className="absolute top-0 left-0 right-[380px] bottom-0 flex">
           <section className="absolute top-0 left-0 right-0 bottom-32 px-4 overflow-y-auto">
-            <EventLog events={events} />
+          <EventLog events={events} />
           </section>
           <section className="absolute h-32 left-0 right-0 bottom-0 p-4">
             <SessionControls

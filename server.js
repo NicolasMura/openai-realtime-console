@@ -27,7 +27,11 @@ app.get("/token", async (req, res) => {
         },
         body: JSON.stringify({
           model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: "verse",
+          voice: "shimmer", // "coral" | "sage" | "shimmer" for female voices, or "alloy" | "ash" | "ballad" | "echo" | "verse" for male voices
+          // To include : https://community.openai.com/t/realtime-api-session-update-doesnt-change-input-audio-format/967077/16
+          input_audio_transcription: { model: "whisper-1", language: "fr" },
+          // timestamp_granularities: ["word"], // n'a pas l'air de fonctionner
+          // modalities: ['text'], // if you don't want to use the audio output
         }),
       },
     );
