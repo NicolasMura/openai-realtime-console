@@ -13,10 +13,10 @@ function SessionStopped({ startSession }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full">
+    <div className="flex items-center justify-center w-[200px] h-full">
       <Button
         onClick={handleStartSession}
-        className={isActivating ? "bg-gray-600" : "bg-red-600"}
+        className={isActivating ? "bg-gray-600 w-[200px]" : "bg-red-600 w-[160px]"}
         icon={<CloudLightning height={16} />}
       >
         {isActivating ? "starting session..." : "start session"}
@@ -34,7 +34,7 @@ function SessionActive({ stopSession, sendTextMessage }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full gap-4">
+    <div className="flex items-center justify-center w-[200px] h-full gap-4">
       <input
         onKeyDown={(e) => {
           if (e.key === "Enter" && message.trim()) {
@@ -43,7 +43,7 @@ function SessionActive({ stopSession, sendTextMessage }) {
         }}
         type="text"
         placeholder="send a text message..."
-        className="border border-gray-200 rounded-full p-4 flex-1"
+        className="border border-gray-200 rounded-full p-4 flex-1 hidden md:inline-block"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
@@ -54,11 +54,11 @@ function SessionActive({ stopSession, sendTextMessage }) {
           }
         }}
         icon={<MessageSquare height={16} />}
-        className="bg-blue-400"
+        className="bg-blue-400 hidden md:inline-block w-[160px]"
       >
         send text
       </Button>
-      <Button onClick={stopSession} icon={<CloudOff height={16} />}>
+      <Button onClick={stopSession} icon={<CloudOff height={16} />} className="w-[140px]">
         disconnect
       </Button>
     </div>
@@ -74,7 +74,7 @@ export default function SessionControls({
   isSessionActive,
 }) {
   return (
-    <div className="flex gap-4 border-t-2 border-gray-200 h-full rounded-md">
+    <div className="flex gap-4 sm:border-t-2 border-gray-200 h-full rounded-md">
       {isSessionActive ? (
         <SessionActive
           stopSession={stopSession}
