@@ -157,6 +157,10 @@ export default function App() {
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
         setEvents([]);
+
+        // First message sent to the model to make it initiate the conversation
+        sendTextMessage("Bonjour, peux-tu initier la conversation en me demandant ce que tu pourrais faire pour moi ?");
+        setMessage("");
       });
     }
 
